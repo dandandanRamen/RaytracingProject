@@ -5,12 +5,14 @@ Adapted from Scratchapixel's Programming Blog. */
 #include <iostream>
 
 ///
-/// Vector3 class to help place objects in 3D space.
+/// Vector3 class to deal with specific points in 3D space. 
 ///
+
 template <typename T>
 class Vec3
 {
-private:
+protected:
+	///member variables
 	T m_x;
 	T m_y;
 	T m_z;
@@ -23,17 +25,27 @@ public:
 
 	
 	///member functions
-	T getLengthSquared() { return (m_x * m_x) + (m_y * m_y) + (m_z * m_z); }  //magnitude is length
-	T getLength() { return m_x + m_y + m_z; }
+	T getLengthSquared() { return (m_x * m_x) + (m_y * m_y) + (m_z * m_z); } 
+	T getLength() { return sqrt(getLengthSquared()); }
+
 	Vec3& normalize()
 	{
-		T lengthSquared = getLengthSquared();
+		T lengthSquared = getLengthSquared();	//1. get the length squared
+		T length = sqrt(getLengthSquared());	//2. 
 	};
 
-	///operator overloads
-	friend Vec3 operator+(const Vec3& v, const Vec3& v2) { return v.m_x + v2.m_x, v.m_y + v2.m_y; }
-	friend Vec3 operator-(const Vec3& v, const Vec3& v2) { return v.m_x - v2.m_x, v.m_y - v2.m_y; }
-	friend std::ostream& operator<<(std::ostream& out, Vec3& v) { out << "(" << v.m_x << ", " << v.m_y << ") "; return out; }
+	///operator overloads (sorry for the dense text!)
+	Vec3 operator+(const Vec3 &v) { return Vec3<T>{m_x + v.m_x, m_y + v.m_y, m_z + v.m_z}; }
+	Vec3 operator-(const Vec3 &v) { return Vec3<T>{m_x - v.m_x, m_y - v.m_y, m_z - v.m_z}; }
+	Vec3 operator*(const Vec3 &v) { return Vec3<T>{m_x * v.m_x, m_y * v.m_y, m_z * v.m_z}; }
+	Vec3 operator-() { return Vec3<T>{-m_x, -m_y, -m_z}; }
+	Vec3& operator+=(const Vec3 &v) { m_x += v.m_x; m_y += v.m_y; m_z += v.m_z; return *this; }
+	Vec3& operator-=(const Vec3& v) { m_x -= v.m_x; m_y -= v.m_y; m_z -= v.m_z; return *this; }
+	friend std::ostream& operator<<(std::ostream& out, Vec3& v) 
+	{ 
+		out << "(" << v.m_x << ", " << v.m_y << ", " << v.m_z << ") "; 
+		return out; 
+	}
 
 };
 
@@ -42,12 +54,8 @@ typedef Vec3<float> Vec3f;
 int main()
 {
 	Vec3f point{ 2, 5, 2 };
-
-	std::cout << point.getLengthSquared() << '\n';
-	std::cout << point.getLength() << '\n';
-	
 	Vec3f point2{ point + point };
-	
+	point2 += point;
 	std::cout << point2 << point << '\n';
 }
 
