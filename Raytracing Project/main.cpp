@@ -23,40 +23,46 @@ public:
 	Vec3() : m_x{ 0 }, m_y{ 0 }, m_z{ 0 } {}						
 	Vec3(T x) : m_x{x}, m_y{x}, m_z{x} {}
 
-	
+
 	///member functions
 	T getLengthSquared() { return (m_x * m_x) + (m_y * m_y) + (m_z * m_z); } 
-	T getLength() { return sqrt(getLengthSquared()); }
+
+	int getDot(const Vec3& v)
+	{
+		return (m_x * v.m_x) + (m_y * v.m_y) + (m_z * v.m_z);
+	};
 
 	Vec3& normalize()
 	{
-		T lengthSquared = getLengthSquared();	//1. get the length squared
-		T length = sqrt(getLengthSquared());	//2. 
+		T length = sqrt(getLengthSquared());	
+		if (length > 0.0) {
+			m_x /= length; m_y /= length; m_z /= length;
+		}
+		return *this;
 	};
 
-	///operator overloads (sorry for the dense text!)
-	Vec3 operator+(const Vec3 &v) { return Vec3<T>{m_x + v.m_x, m_y + v.m_y, m_z + v.m_z}; }
-	Vec3 operator-(const Vec3 &v) { return Vec3<T>{m_x - v.m_x, m_y - v.m_y, m_z - v.m_z}; }
-	Vec3 operator*(const Vec3 &v) { return Vec3<T>{m_x * v.m_x, m_y * v.m_y, m_z * v.m_z}; }
-	Vec3 operator-() { return Vec3<T>{-m_x, -m_y, -m_z}; }
-	Vec3& operator+=(const Vec3 &v) { m_x += v.m_x; m_y += v.m_y; m_z += v.m_z; return *this; }
-	Vec3& operator-=(const Vec3& v) { m_x -= v.m_x; m_y -= v.m_y; m_z -= v.m_z; return *this; }
-	friend std::ostream& operator<<(std::ostream& out, Vec3& v) 
+	///operator overloads
+	Vec3 operator + (const Vec3 &v) { return Vec3<T>{m_x + v.m_x, m_y + v.m_y, m_z + v.m_z}; }
+	Vec3 operator - (const Vec3 &v) { return Vec3<T>{m_x - v.m_x, m_y - v.m_y, m_z - v.m_z}; }
+	Vec3 operator * (const Vec3 &v) { return Vec3<T>{m_x * v.m_x, m_y * v.m_y, m_z * v.m_z}; }
+	Vec3 operator - () { return Vec3<T>{-m_x, -m_y, -m_z}; }
+	Vec3& operator += (const Vec3 &v) { m_x += v.m_x; m_y += v.m_y; m_z += v.m_z; return *this; }
+	Vec3& operator -= (const Vec3 &v) { m_x -= v.m_x; m_y -= v.m_y; m_z -= v.m_z; return *this; }
+	friend std::ostream& operator << (std::ostream& out, Vec3& v) 
 	{ 
 		out << "(" << v.m_x << ", " << v.m_y << ", " << v.m_z << ") "; 
 		return out; 
 	}
-
 };
 
 typedef Vec3<float> Vec3f;
 
 int main()
 {
-	Vec3f point{ 2, 5, 2 };
-	Vec3f point2{ point + point };
-	point2 += point;
-	std::cout << point2 << point << '\n';
+	Vec3f point{ 1.0, 2.0, 3.0};
+	Vec3f point2{ 2.0, 4.0, 6.0 };
+	std::cout << point.getDot(point2) << '\n';
+	
 }
 
 
