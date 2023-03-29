@@ -5,6 +5,7 @@ Adapted from Peter Shirley's "Raytracing in One Weekend" */
 
 int main()
 {
+
 	//Image Resolution
 
 	const int width = 256;
@@ -15,7 +16,7 @@ int main()
 	std::cout << "P3\n" << width << ' ' << height << "\n255\n";
 
 	for (int j = 0; j < height - 1; ++j) {
-		std::cerr << "\Scanlines remaining: " << j << ' ' << std::endl;	//writes progress to error output stream
+		std::cerr << "\nScanlines remaining: " << j << ' ' << std::endl;	//writes progress to error output stream
 		for (int i = 0; i < width; ++i) {
 
 			double r = double(i) / (width - 1);
