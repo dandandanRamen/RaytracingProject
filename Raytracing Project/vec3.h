@@ -4,6 +4,7 @@
 #include <iostream>
 
 /// Vec3 class to deal with representing 3D positions, directions, offsets, RGB Color, etc. 
+/// important typedefs (vec3f, color3f) at the bottom...
 
 template <typename T>
 class Vec3
@@ -22,7 +23,8 @@ public:
 	//member functions
 	T getLengthSquared() { return (m_x * m_x) + (m_y * m_y) + (m_z * m_z); }
 	T getLength() { return sqrt(getLengthSquared()); }
-	Vec3 getUnitVector(Vec3 v) { return v / v.getLength(); };
+
+	Vec3 UnitVector(Vec3 v) { return v / v.getLength(); };
 
 	Vec3& normalize()
 	{
@@ -31,12 +33,12 @@ public:
 		return *this;
 	};
 
-	float getDotProduct(const Vec3& v)
+	float DotProduct(const Vec3& v)
 	{
 		return (m_x * v.m_x) + (m_y * v.m_y) + (m_z * v.m_z);
 	};
 
-	Vec3& getCrossProduct(const Vec3& v)
+	Vec3& CrossProduct(const Vec3& v)
 	{
 		return Vec3<T>(m_y * v.m_z - m_z * v.m_y,
 					   m_z * v.m_x - m_x * v.m_z,
@@ -57,14 +59,15 @@ public:
 	}
 };
 
-//typedef Vec3<float> Vec3f;
-using Vec3f = Vec3<float>;
-//using point = Vec3f;		
-//using color = Vec3f;
+//typedef Vec3<float> vec3f;
+using vec3f = Vec3<float>;			//for all geometric usage
+using color3f = Vec3<float>;		//for all color based usage
+
 
 #endif
 
 
+//feedback from a coding friend:
 
 //→ For a class that represents a tiny, basic type, I would make it a pure value.Thus, all its members would be const except for assignment operator. Operations that modify the vector would return a new one without touching this.
 //
