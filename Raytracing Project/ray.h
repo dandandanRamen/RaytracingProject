@@ -5,21 +5,21 @@
 
 /// ray class to represent the points along in 3D space
 
-class Ray {
+class ray {
 	public:
-		vec3f m_org;
-		vec3f m_dir;
+		vec3d m_org;
+		vec3d m_dir;
 
 	public:
-		Ray() {}
-		Ray(const Vec3f origin, const vec3f direction, ) : m_org{ origin }, m_dir{ direction } {}
+		ray() {}
+		ray(const vec3d origin, const vec3d direction) : m_org{ origin }, m_dir{ direction } {}
 
-		vec3f getOrigin() const { return m_org; }
-		vec3f getDirection() const { return m_dir; }
+		vec3d getOrigin() const { return m_org; }
+		vec3d getDirection() const { return m_dir; }
 
-		vec3f positionAt(double t) const 
+		vec3d at(float t) const 
 		{ 
-			return m_org + (t * direction); //P(t) = A + tB
+			return m_org + (t * m_dir); //P(t) = A + tB
 		}
 };
 

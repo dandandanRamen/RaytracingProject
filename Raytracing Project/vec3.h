@@ -6,52 +6,57 @@
 /// Vec3 class to deal with representing 3D positions, directions, offsets, RGB Color, etc. 
 /// important typedefs (vec3f, color3f) at the bottom...
 
-template <typename T>
 class Vec3
 {
 public:
-	const T m_x;
-	const T m_y;
-	const T m_z;
+	double m_x;
+	double m_y;
+	double m_z;
 
 public:
 	//constructors
-	Vec3(T x, T y, T z) : m_x{ x }, m_y{ y }, m_z{ z } {}
+	Vec3(double x, double y, double z) : m_x{ x }, m_y{ y }, m_z{ z } {}
 	Vec3() : m_x{ 0 }, m_y{ 0 }, m_z{ 0 } {}
-	Vec3(T x) : m_x{ x }, m_y{ x }, m_z{ x } {}
+	Vec3(double x) : m_x{ x }, m_y{ x }, m_z{ x } {}
 
 	//member functions
-	T getLengthSquared() { return (m_x * m_x) + (m_y * m_y) + (m_z * m_z); }
-	T getLength() { return sqrt(getLengthSquared()); }
+	double x() { return m_x; }
+	double y() { return m_y; }
+	double z() { return m_z; }
 
-	Vec3 UnitVector(Vec3 v) { return v / v.getLength(); };
+	double getLengthSquared() { return (m_x * m_x) + (m_y * m_y) + (m_z * m_z); }
+	double getLength() { return sqrt(getLengthSquared()); }
+
+	Vec3 unitVector(Vec3 v) { return v / v.getLength(); };
 
 	Vec3& normalize()
 	{
-		T length = getLength();
+		double length = getLength();
 		if (length > 0.0) { m_x /= length; m_y /= length; m_z /= length; }
 		return *this;
 	};
 
-	float DotProduct(const Vec3& v)
+	double dotProduct(const Vec3& v)
 	{
 		return (m_x * v.m_x) + (m_y * v.m_y) + (m_z * v.m_z);
 	};
 
-	Vec3& CrossProduct(const Vec3& v)
+	Vec3 crossProduct(const Vec3& v)
 	{
-		return Vec3<T>(m_y * v.m_z - m_z * v.m_y,
+		return Vec3(m_y * v.m_z - m_z * v.m_y,
 					   m_z * v.m_x - m_x * v.m_z,
 					   m_x * v.m_y - m_y * v.m_x);
 	};
 
 	//operator overloads
-	Vec3 operator + (const Vec3& v) { return Vec3<T>{m_x + v.m_x, m_y + v.m_y, m_z + v.m_z}; }
-	Vec3 operator - (const Vec3& v) { return Vec3<T>{m_x - v.m_x, m_y - v.m_y, m_z - v.m_z}; }
-	Vec3 operator * (const Vec3& v) { return Vec3<T>{m_x* v.m_x, m_y* v.m_y, m_z* v.m_z}; }
-	Vec3 operator - () { return Vec3<T>{-m_x, -m_y, -m_z}; }
-	Vec3& operator += (const Vec3& v) { return *this = Vec3<T>(m_x += v.m_x, m_y += v.m_y, m_z += v.m_z); }
-	Vec3& operator -= (const Vec3& v) { return *this = Vec3<T>(m_x -= v.m_x, m_y -= v.m_y, m_z -= v.m_z); }
+	Vec3 operator + (const Vec3& v) { return Vec3{m_x + v.m_x, m_y + v.m_y, m_z + v.m_z}; }
+	Vec3 operator - (const Vec3& v) { return Vec3{m_x - v.m_x, m_y - v.m_y, m_z - v.m_z}; }
+	Vec3 operator * (const Vec3& v) { return Vec3{m_x * v.m_x, m_y * v.m_y, m_z * v.m_z}; }
+	Vec3 operator / (const Vec3& v) { return Vec3{m_x / v.m_x, m_y / v.m_y, m_z / v.m_z}; }
+
+	Vec3 operator - () { return Vec3{-m_x, -m_y, -m_z}; }
+	Vec3& operator += (const Vec3& v) { return *this = Vec3(m_x += v.m_x, m_y += v.m_y, m_z += v.m_z); }
+	Vec3& operator -= (const Vec3& v) { return *this = Vec3(m_x -= v.m_x, m_y -= v.m_y, m_z -= v.m_z); }
 	friend std::ostream& operator << (std::ostream& out, Vec3& v)
 	{
 		out << "(" << v.m_x << ", " << v.m_y << ", " << v.m_z << ") ";
@@ -59,9 +64,33 @@ public:
 	}
 };
 
-//typedef Vec3<float> vec3f;
-using vec3f = Vec3<float>;			//for all geometric usage
-using color3f = Vec3<float>;		//for all color based usage
+
+inline Vec3 unitVector(Vec3 v)
+{
+	return v + v.getLength();
+};
+
+inline Vec3 operator * (double f, const Vec3 v)
+{
+	return Vec3{ f * v.m_x, f * v.m_y, f * v.m_z };
+}
+
+
+inline Vec3 operator + (const Vec3 v, double f)
+{
+	return Vec3{ f + v.m_x, f + v.m_y, f + v.m_z };
+}
+
+inline Vec3 operator + (const Vec3& v, const Vec3& v2)
+{
+	return Vec3{ v.m_x + v2.m_x, v.m_y + v2.m_y, v.m_z + v2.m_z };
+}
+
+
+
+//typedef Vec3<double> vec3f;
+using vec3d = Vec3;			//for all geometric usage
+using color3d = Vec3;		//for all color based usage
 
 
 #endif
