@@ -13,9 +13,9 @@ color3d calculate_color(int itr, int itr2, int width, int height)
 ///output the translated value of each color component in text (R, G, B) [0, 256]
 void output_Color(std::ostream& out, color3d pixelColor)
 {
-	out << static_cast<int>(255.99 * pixelColor.m_x) << ' '
-		<< static_cast<int>(255.99 * pixelColor.m_y) << ' '
-		<< static_cast<int>(255.99 * pixelColor.m_z) << '\n';
+	out << static_cast<int>(255.99 * pixelColor.x()) << ' '
+		<< static_cast<int>(255.99 * pixelColor.y()) << ' '
+		<< static_cast<int>(255.99 * pixelColor.z()) << '\n';
 }
 
 #endif

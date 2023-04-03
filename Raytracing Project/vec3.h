@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+
 /// Vec3 class to deal with representing 3D positions, directions, offsets, RGB Color, etc. 
 /// important typedefs (vec3f, color3f) at the bottom...
 
@@ -55,8 +56,13 @@ public:
 	Vec3 operator / (const Vec3& v) { return Vec3{m_x / v.m_x, m_y / v.m_y, m_z / v.m_z}; }
 
 	Vec3 operator - () { return Vec3{-m_x, -m_y, -m_z}; }
+
 	Vec3& operator += (const Vec3& v) { return *this = Vec3(m_x += v.m_x, m_y += v.m_y, m_z += v.m_z); }
 	Vec3& operator -= (const Vec3& v) { return *this = Vec3(m_x -= v.m_x, m_y -= v.m_y, m_z -= v.m_z); }
+	Vec3& operator *= (const Vec3& v) { return *this = Vec3(m_x *= v.m_x, m_y *= v.m_y, m_z *= v.m_z); }
+
+	Vec3& operator /= (const double t) { return *this *= 1 / t; }
+
 	friend std::ostream& operator << (std::ostream& out, Vec3& v)
 	{
 		out << "(" << v.m_x << ", " << v.m_y << ", " << v.m_z << ") ";
@@ -64,31 +70,27 @@ public:
 	}
 };
 
-
+//external functions
 inline Vec3 unitVector(Vec3 v)
 {
-	return v + v.getLength();
+	return v / v.getLength();
 };
 
-inline Vec3 operator * (double f, const Vec3 v)
-{
-	return Vec3{ f * v.m_x, f * v.m_y, f * v.m_z };
-}
+//external operator overloads
+inline Vec3 operator + (const Vec3& v, const Vec3& v2) { return Vec3{ v.m_x + v2.m_x, v.m_y + v2.m_y, v.m_z + v2.m_z }; }
+inline Vec3 operator - (const Vec3& v, const Vec3& v2) { return Vec3{ v.m_x - v2.m_x, v.m_y - v2.m_y, v.m_z - v2.m_z }; }
+inline Vec3 operator * (const Vec3& v, const Vec3& v2) { return Vec3{ v.m_x * v2.m_x, v.m_y * v2.m_y, v.m_z * v2.m_z }; }
 
+inline Vec3 operator * (double n, const Vec3 v) { return Vec3{ n * v.m_x, n * v.m_y, n * v.m_z }; }
+inline Vec3 operator * (const Vec3 v, double n) { return n * v; }
 
-inline Vec3 operator + (const Vec3 v, double f)
-{
-	return Vec3{ f + v.m_x, f + v.m_y, f + v.m_z };
-}
-
-inline Vec3 operator + (const Vec3& v, const Vec3& v2)
-{
-	return Vec3{ v.m_x + v2.m_x, v.m_y + v2.m_y, v.m_z + v2.m_z };
-}
+inline Vec3 operator / (Vec3 v, double t) { return (1 / t) * v; }
 
 
 
-//typedef Vec3<double> vec3f;
+
+
+//type aliases are questionable i know
 using vec3d = Vec3;			//for all geometric usage
 using color3d = Vec3;		//for all color based usage
 
