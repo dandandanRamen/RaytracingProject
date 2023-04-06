@@ -7,12 +7,29 @@ Adapted from Peter Shirley's "Raytracing in One Weekend" */
 #include "ray.h"
 #include "vec3.h"
 
-//returns a vec3 color using math magic on a ray (based on ray direction, unit vectors, t, y axis, etc)
+//use the quadratic forumla to determine if the ray hits sphere. 
+bool hit_sphere(const vec3d& center, double radius, const ray& r)
+{
+	vec3d oc = r.getOrigin() - center;
+	double a = dotProduct(r.getDirection(), r.getDirection());
+	double b = 2.0 * dotProduct(oc, r.getDirection());
+	double c = dotProduct(oc, oc) - (radius * radius);
+
+	double discriminant = (b * b) - 4 * a * c;				//b^2 - 4ac
+	return (discriminant > 0);
+}
+
+//returns a vec3 color per ray (based on ray direction, unit vectors, t, y axis, etc)
 color3d ray_color(const ray& r)	
 {
-	vec3d unit_direction = unitVector(r.getDirection());
-	double t = 0.5 * (unit_direction.y() + 1.0);
-	return (1.0 - t) * color3d(1.0, 1.0, 1.0) + t*color3d(0.5, 0.7, 1.0);
+	if (hit_sphere(vec3d(0, 0, -1), 0.5, r))
+		return color3d(1, 0, 0);
+
+	//calculate ray color depending on direction of ray.
+	vec3d unit_direction = unitVector(r.getDirection());	//normalize direction vector
+	auto t = 0.5 * (unit_direction.y() + 1.0);			//times t * dir.y (y is height)
+	vec3d blendedValue = (1.0 - t) * color3d(1.0, 1.0, 1.0) + t * color3d(0.5, 0.7, 1.0);
+	return blendedValue; 
 }
 
 int main()
@@ -39,11 +56,12 @@ int main()
 		std::cerr << "\rScanlines remaining: " << j << ' ' << std::flush;  //shows progress
 		for (int i = 0; i < image_width; ++i) {
 
-			auto u = double(i) / (image_width - 1);
-			auto v = double(j) / (image_height - 1);
+			auto v = double(j) / (image_height - 1);	//scales height with itr
+			auto u = double(i) / (image_width - 1);		//scales width with itr
 
 			ray r(origin, (lower_left_corner + (u * horizontal) + (v * vertical) - origin)); //(origin, direction.)
 			color3d pixel_color = ray_color(r);
+
 			//color3d rgb = calculate_color(j, i, image_width, image_height);
 			output_Color(std::cout, pixel_color);
 		}
