@@ -8,30 +8,33 @@ Adapted from Peter Shirley's "Raytracing in One Weekend" */
 #include "vec3.h"
 
 //use the quadratic forumla to determine if the ray hits sphere. 
-double hit_sphere(const vec3d& center, double radius, const ray& r)
+double hit_sphere(const vec3d& sphereCenter, double radius, const ray& r)
 {
-	vec3d oc = r.getOrigin() - center;
-	double a = dotProduct(r.getDirection(), r.getDirection());
-	double b = 2.0 * dotProduct(oc, r.getDirection());
-	double c = dotProduct(oc, oc) - (radius * radius);
-	double discriminant = (b * b) - 4 * a * c;				//b^2 - 4ac
+	vec3d oc = r.getOrigin() - sphereCenter;								//get origin minus center. 
+	double a = r.getDirection().getLengthSquared();							//calculate a
+	double b = 2.0 * dotProduct(oc, r.getDirection());						//calculate b
+	double c = oc.getLengthSquared() - (radius * radius);						//calculate c
+
+	double discriminant = (b * b) - 4 * a * c;								//b^2 - 4ac
 
 	if (discriminant < 0)
-		return -1.0;
+		return -1.0;														//sphere wasn't hit.
 	else
-		return (-b - sqrt(discriminant)) / (2.0 * a);
+		return (-b - sqrt(discriminant)) / (2.0 * a);						//sphere hit.
 }
 
 //returns a vec3 color per ray (based on ray direction, unit vectors, t, y axis, etc)
 color3d ray_color(const ray& r)	
 {
+	//calculate if ray it sphere first, output color to reflect that.
 	double t = hit_sphere(vec3d(0, 0, -1), 0.5, r);
+
 	if (t > 0.0) {
 		vec3d normal = unitVector(r.at(t) - vec3d(0, 0, -1));
 		return 0.5 * color3d(normal.x() + 1, normal.y() + 1, normal.z() + 1);
 	}
 
-	//calculate ray color depending on direction of ray.
+	//else calculate ray color depending on direction of ray.
 	vec3d unit_direction = unitVector(r.getDirection());				//normalize direction vector
 	t = 0.5 * (unit_direction.y() + 1.0);								//t will be scaled with height y
 	vec3d blendedValue = (1.0 - t) * color3d(1.0, 1.0, 1.0) + t * color3d(0.5, 0.7, 1.0);

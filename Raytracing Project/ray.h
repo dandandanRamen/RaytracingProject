@@ -17,7 +17,7 @@ class ray {
 		vec3d getOrigin() const { return m_org; }
 		vec3d getDirection() const { return m_dir; }
 
-		vec3d at(float t) const 
+		vec3d at(double t) const 
 		{ 
 			return m_org + t*m_dir; //P(t) = A + tB
 		}
