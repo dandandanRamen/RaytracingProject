@@ -4,7 +4,7 @@
 #include <iostream>
 #include "vec3.h"
 
-///calculate each normalized color channel, return channels in a Vec3f (R, G, B) [-1, 1]
+///calculate each normalized color channel, return channels in a Vec3f (R, G, B)
 color3d calculate_color(int itr, int itr2, int width, int height)
 {
 	return color3d(float(itr) / (width - 1), float(itr2) / (height - 1), 0.25);

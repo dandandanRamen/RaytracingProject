@@ -9,11 +9,13 @@ struct hit_record {
 	double t;
 };
 
+//abstract class hittable
+
 class hittable {
 public:
 
 	//meant to be overridden, that's why it's virtual and = 0.
-	virtual bool hit(const ray& r, double tmin, double tmax, hit_record& record) = 0;
+	virtual bool hit(const ray& r, double tmin, double tmax, hit_record& rec) = 0;
 };
 
 #endif
